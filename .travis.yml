@@ -4,4 +4,8 @@ os:
   - linux
   - osx
 script:
-  - python compile.py
+  - ./install-ngrok.sh
+  - ./ngrok --version
+  - python rust-compile.py
+env:
+  - NGROK_URL=tpl
