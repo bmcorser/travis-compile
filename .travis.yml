@@ -1,0 +1,11 @@
+sudo: required
+language: rust
+os:
+  - linux
+  - osx
+script:
+  - ./install-ngrok.sh
+  - ./ngrok --version
+  - python rust-compile.py
+env:
+  - NGROK_URL=tpl
