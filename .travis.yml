@@ -1,9 +1,7 @@
 sudo: required
+language: rust
 os:
   - linux
   - osx
-before_install:
-  - curl -sf -L https://static.rust-lang.org/rustup.sh | sh /dev/stdin --yes
 script:
-  - rustc --version
   - python compile.py
