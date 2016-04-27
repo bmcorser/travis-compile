@@ -1,6 +1,7 @@
 import shutil
 import socket
 import subprocess
+import sys
 import uuid
 
 import requests
@@ -90,3 +91,7 @@ def main(cargo_path, user, token):
     template('.travis.yml', ngrok_url)
     commit()
     make_pr(user, token, branch)
+
+if __name__ == '__main__':
+    cargo_path, user, token = sys.argv[1:]
+    print(cargo_path, user, token)
