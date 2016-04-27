@@ -90,9 +90,14 @@ def make_pr(user, token, branch):
         'head': "{0}:{1}".format(user, branch),
         'base': 'master'
     }
-    resp = requests.post(url, auth=(user, token), json=pr, timeout=2)
+    resp = requests.post(url, auth=(user, token), json=pr, timeout=5)
     assert resp.ok
     return resp.json()
+
+
+def delete_branch(branch):
+    subprocess.check_call(['git', 'branch', '-D', branch])
+    subprocess.check_call(['git', 'push', 'origin', ":{0}".format(branch)])
 
 
 def template(name, *fmt_args):
@@ -105,20 +110,21 @@ def template(name, *fmt_args):
 def main(cargo_path, user, token, ngrok_proc):
     clean()
     branch = "compile-{0}".format(uuid.uuid4().hex[:7])
-    checkout(branch, new=True)
-    shutil.copytree(cargo_path, './rust-src')
-    receiver_port = free_port()
-    ngrok_proc, ngrok_url = start_ngrok(receiver_port)
-    template('.travis.yml', ngrok_url)
-    commit()
-    make_pr(user, token, branch)
-    receiver = subprocess.Popen([
-        'python',
-        'receiver.py',
-        str(receiver_port),
-        '2',
-    ])
-    receiver.wait()
+    try:
+        checkout(branch, new=True)
+        shutil.copytree(cargo_path, './rust-src')
+        receiver_port = free_port()
+        ngrok_proc, ngrok_url = start_ngrok(receiver_port)
+        template('.travis.yml', ngrok_url)
+        commit()
+        make_pr(user, token, branch)
+        receiver = subprocess.Popen([
+            'python', 'receiver.py',
+            str(receiver_port), '2',
+        ])
+        receiver.wait()
+    finally:
+        delete_branch(branch)
 
 if __name__ == '__main__':
     cargo_path, user, token = sys.argv[1:]
