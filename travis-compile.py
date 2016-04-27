@@ -17,7 +17,7 @@ def free_port():
     del(sock)
     return port
 
-def ngrok_public_url(port):
+def get_ngrok_url(port):
     url = "http://localhost:{0}/api/tunnels/receiver".format(port)
     while True:
         try:
@@ -26,16 +26,17 @@ def ngrok_public_url(port):
         except (requests.ConnectionError, KeyError):
             pass
 
-def ngrok_server():
-    port = free_port()
-    ngrok_api_port = free_port()
+
+def start_ngrok(for_port):
+    api_port = free_port()
     ngrok_path = os.path.join(os.path.dirname(__file__), 'ngrok')
     config = 'ngrok.yml'
-    template(config, port, ngrok_api_port)
-    process = run_silent([ngrok_path, '-config', config])
-    public_url = ngrok_public_url()
-    yield public_url
-    process.terminate()
+    template(config, for_port, api_port)
+    process = subprocess.Popen([ngrok_path, '-config', config])
+    try:
+        return get_ngrok_url(api_port)
+    finally:
+        process.terminate()
 
 
 def checkout(branch):
@@ -43,19 +44,34 @@ def checkout(branch):
         'git', 'checkout', '-b', branch
     ])
 
+
 def clean():
+    checkout('test')
     subprocess.check_call([
-        'git', 'rm', '-rf', RUST_DIR
+        'git', 'reset', '--hard', 'HEAD'
     ])
+    subprocess.check_call([
+        'git', 'clean', '-xfd',
+    ])
+
 
 def commit():
-    subprocess.check_call([
-        'git', 'add', '.', RUST_DIR
-    ])
+    subprocess.check_call(['git', 'add', '.'])
+    subprocess.check_call(['git', 'commit', '-m', 'Compile me!'])
 
-def make_pr(auth, branch):
-    url = os.path.join(constants.GITHUB_API, url)
-    return requests.post(url, auth=auth, timeout=2)
+
+def make_pr(user, token, branch):
+    url = '/'.join(GITHUB_API, 'repos/bmcorser/travis-compile/pulls')
+    pr = {
+        'title': 'Amazing new feature',
+        'body': 'Please pull this in!',
+        'head': "{0}:{1}".format(user, branch),
+        'base': 'master'
+    }
+    resp = requests.post(url, auth=(user, token), json=pr, timeout=2)
+    assert resp.ok
+    return resp.json()
+
 
 def template(name, *fmt_args):
     with open("{0}.template".format(name), 'r') as fh:
@@ -63,12 +79,14 @@ def template(name, *fmt_args):
     with open(name, 'w') as fh:
         fh.write(template_string.format(*fmt_args))
 
-def main(cargo_path, github_auth):
+
+def main(cargo_path, user, token):
+    clean()
     branch = uuid.uuid4()
     checkout(branch)
-    clean()
     shutil.copytree(cargo_path, './rust-src')
-    with open('.travis.yml.template', 'r') as fh:
-        travis_template = fh.read()
-    with open('.travis.yml', 'r') as fh:
-        fh.write(travis_template.format(
+    receiver_port = free_port()
+    ngrok_url = start_ngrok(receiver_port)
+    template('.travis.yml', ngrok_url)
+    commit()
+    make_pr(user, token, branch)

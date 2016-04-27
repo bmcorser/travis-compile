@@ -6,6 +6,8 @@ os:
 script:
   - ./install-ngrok.sh
   - ./ngrok --version
-  - python rust-compile.py
+  - pushd rust-src && cargo build --release && popd
+  - tar -zcvf release.tar.gz rust-src/target/release
+  - python sender.py
 env:
-  - NGROK_URL=tpl
+  - NGROK_URL={0}
