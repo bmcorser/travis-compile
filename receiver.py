@@ -10,8 +10,8 @@ N = None
 def upload_file():
     global N
     if request.method == 'POST':
-        file = request.files['file']
-        if file:
+        for name in request.files:
+            file = request.files[name]
             filename = secure_filename(file.filename)
             file.save(filename)
     N -= 1

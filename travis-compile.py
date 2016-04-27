@@ -112,7 +112,12 @@ def main(cargo_path, user, token, ngrok_proc):
     template('.travis.yml', ngrok_url)
     commit()
     make_pr(user, token, branch)
-    receiver = subprocess.Popen(['python', 'receiver', str(receiver_port), '2'])
+    receiver = subprocess.Popen([
+        'python',
+        'receiver.py',
+        str(receiver_port),
+        '2',
+    ])
     import ipdb;ipdb.set_trace()
     receiver.wait()
 
