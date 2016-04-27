@@ -94,4 +94,4 @@ def main(cargo_path, user, token):
 
 if __name__ == '__main__':
     cargo_path, user, token = sys.argv[1:]
-    print(cargo_path, user, token)
+    main(cargo_path, user, token)
