@@ -85,8 +85,8 @@ def make_pr(user, token, branch):
     subprocess.check_call(['git', 'push', 'origin', branch])
     url = '/'.join([GITHUB_API, 'repos/bmcorser/travis-compile/pulls'])
     pr = {
-        'title': 'Amazing new feature',
-        'body': 'Please pull this in!',
+        'title': 'Compile me!',
+        'body': '',
         'head': "{0}:{1}".format(user, branch),
         'base': 'master'
     }
@@ -113,6 +113,8 @@ def main(cargo_path, user, token, ngrok_proc):
     import ipdb;ipdb.set_trace()
     commit()
     make_pr(user, token, branch)
+    receiver = run_silent(['python', 'receiver', receiver_port, '2'])
+    receiver.wait()
 
 if __name__ == '__main__':
     cargo_path, user, token = sys.argv[1:]

@@ -10,3 +10,6 @@ def main():
     files = {name: open('./release.tar.gz', 'rb')}
     resp = requests.post(os.environ['NGROK_URL'], files=files)
     assert resp.ok
+
+if __name__ == '__main__':
+    main()

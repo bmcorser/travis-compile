@@ -7,6 +7,7 @@ script:
   - ./install-ngrok.sh
   - ./ngrok --version
   - pushd rust-src && cargo build --release && popd
+  - pip install requests flask
   - tar -zcvf release.tar.gz rust-src/target/release
   - python sender.py
 env:

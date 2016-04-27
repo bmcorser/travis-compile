@@ -1,25 +1,26 @@
-import os
-from flask import Flask, request, redirect, url_for
+import sys
+from flask import Flask, request
 from werkzeug import secure_filename
 
-UPLOAD_FOLDER = '/path/to/the/uploads'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+N = None
 
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
+    global N
     if request.method == 'POST':
         file = request.files['file']
-        if file and allowed_file(file.filename):
+        if file:
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
+            file.save(filename)
+    N -= 1
+    if N < 1:
+        request.environ.get('werkzeug.server.shutdown')()
+    return 'ok'
+
+
+if __name__ == '__main__':
+    port, n = map(int, sys.argv[1:])
+    N = n
+    app.run(port=port, debug=True)
