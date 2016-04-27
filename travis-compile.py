@@ -96,7 +96,7 @@ def make_pr(user, token, branch):
 
 
 def clean_up(branch):
-    subprocess.check_call(['git', 'checkout', 'test'])
+    subprocess.check_call(['git', 'checkout', 'master'])
     subprocess.check_call(['git', 'branch', '-D', branch])
     subprocess.check_call(['git', 'push', 'origin', ":{0}".format(branch)])
 
