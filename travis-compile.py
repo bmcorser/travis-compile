@@ -55,10 +55,7 @@ def start_ngrok(for_port):
     config = 'ngrok.yml'
     template(config, api_port)
     process = run_silent([ngrok_path, 'http', str(for_port), '-config', config])
-    try:
-        return get_ngrok_url(api_port)
-    finally:
-        process.terminate()
+    return process, get_ngrok_url(api_port)
 
 
 def checkout(branch, new=False):
@@ -104,18 +101,23 @@ def template(name, *fmt_args):
         fh.write(template_string.format(*fmt_args))
 
 
-def main(cargo_path, user, token):
+def main(cargo_path, user, token, ngrok_proc):
     clean()
     branch = uuid.uuid4().hex
     checkout(branch, new=True)
     shutil.copytree(cargo_path, './rust-src')
     receiver_port = free_port()
-    import ipdb;ipdb.set_trace()
-    ngrok_url = start_ngrok(receiver_port)
+    ngrok_proc, ngrok_url = start_ngrok(receiver_port)
     template('.travis.yml', ngrok_url)
+    import ipdb;ipdb.set_trace()
     commit()
     make_pr(user, token, branch)
 
 if __name__ == '__main__':
     cargo_path, user, token = sys.argv[1:]
-    main(cargo_path, user, token)
+    ngrok_proc = None
+    try:
+        main(cargo_path, user, token, ngrok_proc)
+    finally:
+        if ngrok_proc:
+            ngrok_proc.terminate()
