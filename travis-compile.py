@@ -37,7 +37,7 @@ def start_ngrok(for_port):
     ngrok_path = os.path.join(dot, 'ngrok')
     config = 'ngrok.yml'
     template(config, api_port)
-    process = subprocess.Popen([ngrok_path, 'http', for_port, '-config', config])
+    process = subprocess.Popen([ngrok_path, 'http', str(for_port), '-config', config])
     try:
         return get_ngrok_url(api_port)
     finally:
