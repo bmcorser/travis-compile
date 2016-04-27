@@ -110,10 +110,10 @@ def main(cargo_path, user, token, ngrok_proc):
     receiver_port = free_port()
     ngrok_proc, ngrok_url = start_ngrok(receiver_port)
     template('.travis.yml', ngrok_url)
-    import ipdb;ipdb.set_trace()
     commit()
     make_pr(user, token, branch)
     receiver = run_silent(['python', 'receiver', str(receiver_port), '2'])
+    import ipdb;ipdb.set_trace()
     receiver.wait()
 
 if __name__ == '__main__':
