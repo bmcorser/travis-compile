@@ -21,6 +21,23 @@ def free_port():
     return port
 
 
+def run_silent(cmd, can_fail=False, **overrides):
+    'Run a command, but discard its output. Raise on error'
+    with open(os.devnull, 'w') as DEVNULL:
+        kwargs = {
+            'stdout': DEVNULL,
+            'stderr': DEVNULL,
+        }
+        kwargs.update(overrides)
+        try:
+            return subprocess.Popen(cmd, **kwargs)
+        except subprocess.CalledProcessError as exc:
+            if can_fail:
+                pass
+            else:
+                raise
+
+
 def get_ngrok_url(port):
     url = "http://localhost:{0}/api/tunnels/receiver".format(port)
     while True:
@@ -37,7 +54,7 @@ def start_ngrok(for_port):
     ngrok_path = os.path.join(dot, 'ngrok')
     config = 'ngrok.yml'
     template(config, api_port)
-    process = subprocess.Popen([ngrok_path, 'http', str(for_port), '-config', config])
+    process = run_silent([ngrok_path, 'http', str(for_port), '-config', config])
     try:
         return get_ngrok_url(api_port)
     finally:
