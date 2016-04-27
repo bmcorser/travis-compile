@@ -113,7 +113,7 @@ def main(cargo_path, user, token, ngrok_proc):
     import ipdb;ipdb.set_trace()
     commit()
     make_pr(user, token, branch)
-    receiver = run_silent(['python', 'receiver', receiver_port, '2'])
+    receiver = run_silent(['python', 'receiver', str(receiver_port), '2'])
     receiver.wait()
 
 if __name__ == '__main__':
