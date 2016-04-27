@@ -40,10 +40,12 @@ def start_ngrok(for_port):
         process.terminate()
 
 
-def checkout(branch):
-    subprocess.check_call([
-        'git', 'checkout', '-b', branch
-    ])
+def checkout(branch, new=False):
+    cmd = ['git', 'checkout']
+    if new:
+        cmd.append('-b')
+    cmd.append(branch)
+    subprocess.check_call(cmd)
 
 
 def clean():
@@ -84,7 +86,7 @@ def template(name, *fmt_args):
 def main(cargo_path, user, token):
     clean()
     branch = uuid.uuid4()
-    checkout(branch)
+    checkout(branch, new=True)
     shutil.copytree(cargo_path, './rust-src')
     receiver_port = free_port()
     ngrok_url = start_ngrok(receiver_port)
