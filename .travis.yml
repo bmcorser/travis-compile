@@ -1,0 +1,14 @@
+sudo: required
+language: rust
+os:
+  - linux
+  - osx
+script:
+  - ./install-ngrok.sh
+  - ./ngrok --version
+  - pushd rust-src && cargo build --release && popd
+  - sudo pip install requests flask
+  - tar -zcvf release.tar.gz rust-src/target/release
+  - python sender.py
+env:
+  - NGROK_URL=https://3e19f04d.ngrok.io
