@@ -39,7 +39,7 @@ def run_silent(cmd, can_fail=False, **overrides):
 
 
 def get_ngrok_url(port):
-    url = "http://localhost:{0}/api/tunnels/receiver".format(port)
+    url = "http://localhost:{0}/api/tunnels/command_line".format(port)
     while True:
         try:
             resp = requests.get(url)
