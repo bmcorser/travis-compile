@@ -82,6 +82,7 @@ def commit():
 
 
 def make_pr(user, token, branch):
+    subprocess.check_call(['git', 'push', 'origin', branch])
     url = '/'.join([GITHUB_API, 'repos/bmcorser/travis-compile/pulls'])
     pr = {
         'title': 'Amazing new feature',
@@ -103,7 +104,7 @@ def template(name, *fmt_args):
 
 def main(cargo_path, user, token, ngrok_proc):
     clean()
-    branch = uuid.uuid4().hex
+    branch = "compile-{0}".format(uuid.uuid4().hex[:7])
     checkout(branch, new=True)
     shutil.copytree(cargo_path, './rust-src')
     receiver_port = free_port()
