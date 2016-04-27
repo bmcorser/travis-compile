@@ -1,3 +1,4 @@
+import os
 import shutil
 import socket
 import subprocess
@@ -10,6 +11,7 @@ import requests
 GITHUB_API = 'https://api.github.com'
 RUST_DIR = 'rust-src'
 
+
 def free_port():
     sock = socket.socket()
     sock.bind(('', 0))
@@ -17,6 +19,7 @@ def free_port():
     sock.close()
     del(sock)
     return port
+
 
 def get_ngrok_url(port):
     url = "http://localhost:{0}/api/tunnels/receiver".format(port)
@@ -89,6 +92,7 @@ def main(cargo_path, user, token):
     checkout(branch, new=True)
     shutil.copytree(cargo_path, './rust-src')
     receiver_port = free_port()
+    import ipdb;ipdb.set_trace()
     ngrok_url = start_ngrok(receiver_port)
     template('.travis.yml', ngrok_url)
     commit()
@@ -96,5 +100,4 @@ def main(cargo_path, user, token):
 
 if __name__ == '__main__':
     cargo_path, user, token = sys.argv[1:]
-    import ipdb;ipdb.set_trace()
     main(cargo_path, user, token)
