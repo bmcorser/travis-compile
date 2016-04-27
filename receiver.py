@@ -11,8 +11,11 @@ def upload_file():
     global N
     if request.method == 'POST':
         for name in request.files:
+            print(name)
             file = request.files[name]
+            print(file)
             filename = secure_filename(file.filename)
+            print(filename)
             file.save(filename)
     N -= 1
     if N < 1:
