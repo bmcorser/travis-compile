@@ -54,7 +54,7 @@ def clean():
         'git', 'reset', '--hard', 'HEAD'
     ])
     subprocess.check_call([
-        'git', 'clean', '-xfd',
+        'git', 'clean', '-fd',
     ])
 
 
@@ -85,7 +85,7 @@ def template(name, *fmt_args):
 
 def main(cargo_path, user, token):
     clean()
-    branch = uuid.uuid4()
+    branch = uuid.uuid4().hex
     checkout(branch, new=True)
     shutil.copytree(cargo_path, './rust-src')
     receiver_port = free_port()
@@ -96,4 +96,5 @@ def main(cargo_path, user, token):
 
 if __name__ == '__main__':
     cargo_path, user, token = sys.argv[1:]
+    import ipdb;ipdb.set_trace()
     main(cargo_path, user, token)
