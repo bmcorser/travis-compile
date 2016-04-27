@@ -82,7 +82,7 @@ def commit():
 
 
 def make_pr(user, token, branch):
-    url = '/'.join(GITHUB_API, 'repos/bmcorser/travis-compile/pulls')
+    url = '/'.join([GITHUB_API, 'repos/bmcorser/travis-compile/pulls'])
     pr = {
         'title': 'Amazing new feature',
         'body': 'Please pull this in!',
