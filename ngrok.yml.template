@@ -1,0 +1,4 @@
+web_addr: localhost:{0}
+tunnels:
+ receiver:
+   addr: {1}
