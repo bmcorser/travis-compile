@@ -29,6 +29,3 @@ rustc -vV
 cargo -V
 ""
 ""
-
-# Make sure git submodules are included
-git submodule update --init --recursive
