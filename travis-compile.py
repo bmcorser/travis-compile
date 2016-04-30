@@ -121,7 +121,7 @@ def main(cargo_path, user, token, ngrok_proc):
         make_pr(user, token, branch)
         receiver = subprocess.Popen([
             'python', 'receiver.py',
-            str(receiver_port), '2',
+            str(receiver_port), '3',
         ])
         receiver.wait()
     finally:
