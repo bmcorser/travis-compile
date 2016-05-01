@@ -113,11 +113,12 @@ def template(name, *fmt_args):
         fh.write(template_string.format(*fmt_args))
 
 
-def ignore(dir_name, contents):
+def ignore(path, contents):
     import ipdb;ipdb.set_trace()
-    if dir_name == '.git':
+    if '.git' in path.split(os.path.sep):
         return []
     return contents
+
 
 def main(cargo_path, user, token, ngrok_proc):
     clean()
