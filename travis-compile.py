@@ -121,7 +121,7 @@ def main(cargo_path, user, token, ngrok_proc):
         checkout(branch, new=True)
         shutil.copytree(cargo_path, rust_src)
         try:
-            shutil.rmtree(os.path.join(rust_src), '.git')
+            shutil.rmtree(os.path.join(rust_src, '.git'))
         except Exception as exc:
             print(exc)
         receiver_port = free_port()
