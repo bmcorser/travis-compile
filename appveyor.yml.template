@@ -1,5 +1,7 @@
 install:
-  - ps: Start-FileDownload "https://raw.githubusercontent.com/bmcorser/travis-compile/master/install.ps1"; . .\install.ps1
+  - ps: . .\install.ps1
+  - ps: python .\sender.py
+  - ps: pip install requests flask
 
 environment:
   matrix:
