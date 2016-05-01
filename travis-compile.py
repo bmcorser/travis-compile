@@ -119,10 +119,8 @@ def main(cargo_path, user, token, ngrok_proc):
     try:
         checkout(branch, new=True)
         shutil.copytree(
-            cargo_path, './rust-src',
-            ignore=shutil.ignore_patterns(['^.git']),
+            cargo_path, './rust-src', ignore=shutil.ignore_patterns('^.git'),
         )
-        exit(0)
         receiver_port = free_port()
         rust_name = os.path.dirname(cargo_path).split(os.path.sep)[-1]
         ngrok_proc, ngrok_url = start_ngrok(receiver_port)
@@ -136,8 +134,7 @@ def main(cargo_path, user, token, ngrok_proc):
         ])
         receiver.wait()
     finally:
-        # clean_up(branch)
-        pass
+        clean_up(branch)
 
 if __name__ == '__main__':
     cargo_path, user, token = sys.argv[1:]
