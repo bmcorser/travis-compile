@@ -78,7 +78,7 @@ def clean():
 
 def commit():
     subprocess.check_call(['git', 'add', '.'])
-    subprocess.check_call(['git', 'commit', '-m', 'Compile me!'])
+    subprocess.check_call(['git', 'commit', '-m', 'Ok then!'])
 
 
 def make_pr(user, token, branch):

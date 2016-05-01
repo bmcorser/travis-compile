@@ -1,15 +1,22 @@
 sudo: required
 language: rust
+rust:
+  - 1.1.0
+
 os:
   - linux
   - osx
+
 script:
-  - ./install-ngrok.sh
-  - ./ngrok --version
-  - pushd rust-src && cargo build --release && popd
+  - ./cargo-build
   - sudo pip install requests flask
-  - tar -zcvf release.tar.gz rust-src/target/release
   - python sender.py
+
 env:
   - NGROK_URL={0} ARCH=x86_64
   - NGROK_URL={0} ARCH=i686
+
+addons:
+  apt:
+    packages:
+      - gcc-multilib
