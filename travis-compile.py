@@ -114,7 +114,7 @@ def template(name, *fmt_args):
 
 
 def ignore(path, contents):
-    import ipdb;ipdb.set_trace()
+    print(path)
     if '.git' in path.split(os.path.sep):
         return []
     return contents
