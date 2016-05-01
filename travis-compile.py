@@ -102,8 +102,8 @@ def clean_up(branch):
         ['git', 'push', 'origin', ":{0}".format(branch)],
     )
     for cmd in cmds:
-        print(' '.join(cmd))
-        # subprocess.check_call(cmd)
+        # print(' '.join(cmd))
+        subprocess.check_call(cmd)
 
 
 def template(name, *fmt_args):
