@@ -125,7 +125,8 @@ def main(cargo_path, user, token, ngrok_proc):
         ])
         receiver.wait()
     finally:
-        clean_up(branch)
+        # clean_up(branch)
+        pass
 
 if __name__ == '__main__':
     cargo_path, user, token = sys.argv[1:]
