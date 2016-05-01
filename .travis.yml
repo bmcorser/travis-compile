@@ -1,0 +1,22 @@
+sudo: required
+language: rust
+rust:
+  - 1.1.0
+
+os:
+  - linux
+  - osx
+
+script:
+  - ./cargo-build
+  - sudo pip install requests flask
+  - python sender.py src
+
+env:
+  - ARCH=x86_64 NGROK_URL=https://d24e24cd.ngrok.io
+  - ARCH=i686 NGROK_URL=https://d24e24cd.ngrok.io
+
+addons:
+  apt:
+    packages:
+      - gcc-multilib
