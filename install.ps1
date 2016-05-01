@@ -1,18 +1,10 @@
 # Determine the appropriate arch to install
 if ($env:PLATFORM -eq "x86") {
     $arch = "i686"
-    $ngrok_archive = "ngrok-stable-windows-386.zip"
 }
 else {
     $arch = "x86_64"
-    $ngrok_archive = "ngrok-stable-windows-amd64.zip"
 }
-
-
-# Install ngrok
-Start-FileDownload "https://bin.equinox.io/c/4VmDzA7iaHb/$ngrok_archive"
-unzip "$ngrok_archive"
-rm "$ngrok_archive"
 
 
 $rust_version = $env:RUST_VERSION
