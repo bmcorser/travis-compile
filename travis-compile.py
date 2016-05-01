@@ -134,7 +134,7 @@ def main(cargo_path, user, token, ngrok_proc):
         ])
         receiver.wait()
     except Exception as exc:
-        raise exc
+        print(exc)
     finally:
         clean_up(branch)
 
