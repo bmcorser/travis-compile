@@ -67,7 +67,7 @@ def checkout(branch, new=False):
 
 
 def clean():
-    checkout('test')
+    checkout('master')
     subprocess.check_call([
         'git', 'reset', '--hard', 'HEAD'
     ])
