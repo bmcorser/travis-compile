@@ -113,12 +113,18 @@ def template(name, *fmt_args):
         fh.write(template_string.format(*fmt_args))
 
 
+def ignore(dir_name, contents):
+    import ipdb;ipdb.set_trace()
+    if dir_name == '.git':
+        return []
+    return contents
+
 def main(cargo_path, user, token, ngrok_proc):
     clean()
     branch = "compile-{0}".format(uuid.uuid4().hex[:7])
     try:
         checkout(branch, new=True)
-        shutil.copytree(cargo_path, './rust-src')
+        shutil.copytree(cargo_path, './rust-src', ignore=ignore)
         receiver_port = free_port()
         rust_name = os.path.dirname(cargo_path).split(os.path.sep)[-1]
         ngrok_proc, ngrok_url = start_ngrok(receiver_port)
