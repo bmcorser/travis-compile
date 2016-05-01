@@ -1,0 +1,11 @@
+install:
+  - ps: . .\install.ps1
+  - ps: python -m pip install --upgrade pip
+  - ps: python -m pip install requests flask
+  - ps: Push-Location rust-src && cargo build --release && Pop-Location
+  - ps: python .\sender.py
+
+environment:
+  matrix:
+    - RUST_VERSION: 1.1.0
+  NGROK_URL: https://205c4ace.ngrok.io
