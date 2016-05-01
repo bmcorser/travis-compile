@@ -96,9 +96,14 @@ def make_pr(user, token, branch):
 
 
 def clean_up(branch):
-    subprocess.check_call(['git', 'checkout', 'master'])
-    subprocess.check_call(['git', 'branch', '-D', branch])
-    subprocess.check_call(['git', 'push', 'origin', ":{0}".format(branch)])
+    cmds = (
+        ['git', 'checkout', 'master'],
+        ['git', 'branch', '-D', branch],
+        ['git', 'push', 'origin', ":{0}".format(branch)],
+    )
+    for cmd in cmds:
+        print(' '.join(cmd))
+        # subprocess.check_call(cmd)
 
 
 def template(name, *fmt_args):
@@ -126,8 +131,7 @@ def main(cargo_path, user, token, ngrok_proc):
         ])
         receiver.wait()
     finally:
-        # clean_up(branch)
-        pass
+        clean_up(branch)
 
 if __name__ == '__main__':
     cargo_path, user, token = sys.argv[1:]
