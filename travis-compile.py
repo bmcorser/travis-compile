@@ -133,6 +133,8 @@ def main(cargo_path, user, token, ngrok_proc):
             str(receiver_port), '4',
         ])
         receiver.wait()
+    except Exception as exc:
+        raise exc
     finally:
         clean_up(branch)
 
