@@ -2,7 +2,7 @@ install:
   - ps: . .\install.ps1
   - ps: python -m pip install --upgrade pip
   - ps: python -m pip install requests flask
-  - ps: Push-Location rust-src && cargo build --release && Pop-Location
+  - ps: Push-Location rust-src; cargo build --release; Pop-Location
   - ps: python .\sender.py
 
 environment:
