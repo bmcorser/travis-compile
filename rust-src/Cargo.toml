@@ -1,0 +1,8 @@
+[package]
+name = "sort"
+version = "0.1.0"
+authors = ["bmcorser <bmcorser@gmail.com>"]
+
+[lib]
+name = "sort"
+crate-type = ["dylib"]
