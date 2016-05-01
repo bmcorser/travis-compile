@@ -125,8 +125,10 @@ def main(cargo_path, user, token, ngrok_proc):
             shutil.rmtree(os.path.join(rust_src, '.git'))
         except Exception as exc:
             print(exc)
+        manifest_path = os.path.join(rust_src, 'Cargo.toml')
         cargo_manifest = json.loads(subprocess.check_output([
-            'cargo', 'read-manifest', '--manifest-path=./Cargo.toml'
+            'cargo', 'read-manifest',
+            "--manifest-path={0}".format(manifest_path)
         ]))
         receiver_port = free_port()
         ngrok_proc, ngrok_url = start_ngrok(receiver_port)
