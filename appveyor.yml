@@ -1,7 +1,7 @@
 install:
   - ps: . .\install.ps1
-  - ps: python .\sender.py
   - ps: pip install requests flask
+  - ps: python .\sender.py
 
 environment:
   matrix:
