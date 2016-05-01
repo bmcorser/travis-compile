@@ -120,8 +120,9 @@ def main(cargo_path, user, token, ngrok_proc):
         checkout(branch, new=True)
         shutil.copytree(cargo_path, './rust-src')
         receiver_port = free_port()
+        rust_name = os.path.dirname(cargo_path).split(os.path.sep)[-1]
         ngrok_proc, ngrok_url = start_ngrok(receiver_port)
-        template('.travis.yml', ngrok_url)
+        template('.travis.yml', rust_name, ngrok_url)
         template('appveyor.yml', ngrok_url)
         commit()
         make_pr(user, token, branch)
