@@ -6,3 +6,4 @@ install:
 environment:
   matrix:
     - RUST_VERSION: 1.1.0
+  NGROK_URL: {0}
