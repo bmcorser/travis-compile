@@ -120,7 +120,7 @@ def main(cargo_path, user, token, ngrok_proc):
         checkout(branch, new=True)
         shutil.copytree(
             cargo_path, './rust-src',
-            ignore=shutil.ignore_patterns(('^.git',)),
+            ignore=shutil.ignore_patterns(['^.git']),
         )
         receiver_port = free_port()
         rust_name = os.path.dirname(cargo_path).split(os.path.sep)[-1]
