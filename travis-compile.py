@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 import socket
@@ -102,8 +103,8 @@ def clean_up(branch):
         ['git', 'push', 'origin', ":{0}".format(branch)],
     )
     for cmd in cmds:
-        print(' '.join(cmd))
-        # subprocess.check_call(cmd)
+        # print(' '.join(cmd))
+        subprocess.check_call(cmd)
 
 
 def template(name, *fmt_args):
@@ -116,13 +117,23 @@ def template(name, *fmt_args):
 def main(cargo_path, user, token, ngrok_proc):
     clean()
     branch = "compile-{0}".format(uuid.uuid4().hex[:7])
+    rust_src = 'rust-src'
     try:
         checkout(branch, new=True)
-        shutil.copytree(cargo_path, './rust-src')
+        shutil.copytree(cargo_path, rust_src)
+        try:
+            shutil.rmtree(os.path.join(rust_src, '.git'))
+        except Exception as exc:
+            print(exc)
+        manifest_path = os.path.join(rust_src, 'Cargo.toml')
+        cargo_manifest = json.loads(subprocess.check_output([
+            'cargo', 'read-manifest',
+            "--manifest-path={0}".format(manifest_path)
+        ]))
         receiver_port = free_port()
         ngrok_proc, ngrok_url = start_ngrok(receiver_port)
-        template('.travis.yml', ngrok_url)
-        template('appveyor.yml', ngrok_url)
+        template('.travis.yml', cargo_manifest['name'], ngrok_url)
+        # template('appveyor.yml', ngrok_url)
         commit()
         make_pr(user, token, branch)
         receiver = subprocess.Popen([
@@ -130,6 +141,8 @@ def main(cargo_path, user, token, ngrok_proc):
             str(receiver_port), '4',
         ])
         receiver.wait()
+    except Exception as exc:
+        print(exc)
     finally:
         clean_up(branch)
 
