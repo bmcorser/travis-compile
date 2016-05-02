@@ -1,6 +1,5 @@
 import sys
 from flask import Flask, request
-from werkzeug import secure_filename
 
 app = Flask(__name__)
 N = None
@@ -9,6 +8,7 @@ N = None
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     global N
+    import ipdb;ipdb.set_trace()
     if request.method == 'POST':
         for name in request.files:
             file = request.files[name]
