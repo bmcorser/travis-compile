@@ -133,7 +133,7 @@ def main(cargo_path, user, token, ngrok_proc):
         receiver_port = free_port()
         ngrok_proc, ngrok_url = start_ngrok(receiver_port)
         template('.travis.yml', cargo_manifest['name'], ngrok_url)
-        # template('appveyor.yml', ngrok_url)
+        template('appveyor.yml', ngrok_url)
         commit()
         make_pr(user, token, branch)
         receiver = subprocess.Popen([
@@ -147,6 +147,7 @@ def main(cargo_path, user, token, ngrok_proc):
         clean_up(branch)
 
 if __name__ == '__main__':
+    subprocess.check_call(['./install-ngrok.sh'])
     cargo_path, user, token = sys.argv[1:]
     ngrok_proc = None
     try:
