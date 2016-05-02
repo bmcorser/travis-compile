@@ -6,7 +6,12 @@ import requests
 
 
 def main(rust_name):
-    system_name = {'Darwin': 'macosx', 'Linux': 'linux'}[platform.system()]
+    system_aliases = {
+        'Darwin': 'macosx',
+        'Linux': 'linux',
+        'Windows': 'windows'
+    }
+    system_name = system_aliases[platform.system()]
     name = "{0}-{1}-{2}.tar.gz".format(rust_name, system_name, env['ARCH'])
     files = {name: open('./release.tar.gz', 'rb')}
     resp = requests.post(env['NGROK_URL'], files=files)
