@@ -41,13 +41,14 @@ def commit():
 
 def make_pr(user, token, branch):
     subprocess.check_call(['git', 'push', 'origin', branch])
-    url = '/'.join([GITHUB_API, 'repos/bmcorser/travis-compile/pulls'])
+    url = '/'.join([GITHUB_API, "repos/{0}/pulls".format(user_repo)])
     pr = {
         'title': 'Compile me!',
         'body': '',
         'head': "{0}:{1}".format(user, branch),
         'base': 'master'
     }
+    user, _ = user_repo.split('/')
     resp = requests.post(url, auth=(user, token), json=pr, timeout=5)
     assert resp.ok
     return resp.json()
@@ -64,7 +65,7 @@ def clean_up(branch):
         # subprocess.check_call(cmd)
 
 
-def main(cargo_path, user, token, ngrok_proc):
+def main(cargo_path, user_repo, token, ngrok_proc):
     clean()
     branch = "compile-{0}".format(uuid.uuid4().hex[:7])
     rust_src = 'rust-src'
@@ -82,10 +83,14 @@ def main(cargo_path, user, token, ngrok_proc):
         ]).decode('utf8'))
         receiver_port = util.free_port()
         ngrok_proc, ngrok_url = util.start_ngrok(receiver_port)
+        print("Requesting pubkey for {0} ...".format(user_repo))
+        pubkey_url = "https://api.travis-ci.org/repos/{0}/key".format(user_repo)
+        pubkey_str = requests.get(pubkey_url).json()['key']
+        import ipdb;ipdb.set_trace()
         util.template('.travis.yml', cargo_manifest['name'], ngrok_url)
         util.template('appveyor.yml', cargo_manifest['name'], ngrok_url)
         commit()
-        make_pr(user, token, branch)
+        make_pr(user_repo, token, branch)
         receiver = subprocess.Popen([
             'python', 'receiver.py',
             str(receiver_port), '6',
@@ -99,10 +104,10 @@ def main(cargo_path, user, token, ngrok_proc):
 
 if __name__ == '__main__':
     subprocess.check_call(['./install-ngrok.sh'])
-    cargo_path, user, token = sys.argv[1:]
+    cargo_path, user_repo, token = sys.argv[1:]
     ngrok_proc = None
     try:
-        main(cargo_path, user, token, ngrok_proc)
+        main(cargo_path, user_repo, token, ngrok_proc)
     finally:
         if ngrok_proc:
             ngrok_proc.terminate()
