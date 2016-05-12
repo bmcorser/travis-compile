@@ -1,62 +1,17 @@
 import json
 import os
 import shutil
-import socket
 import subprocess
 import sys
 import uuid
 
 import requests
 
+import util
+
 
 GITHUB_API = 'https://api.github.com'
 RUST_DIR = 'rust-src'
-
-
-def free_port():
-    sock = socket.socket()
-    sock.bind(('', 0))
-    port = sock.getsockname()[1]
-    sock.close()
-    del(sock)
-    return port
-
-
-def run_silent(cmd, can_fail=False, **overrides):
-    'Run a command, but discard its output. Raise on error'
-    with open(os.devnull, 'w') as DEVNULL:
-        kwargs = {
-            'stdout': DEVNULL,
-            'stderr': DEVNULL,
-        }
-        kwargs.update(overrides)
-        try:
-            return subprocess.Popen(cmd, **kwargs)
-        except subprocess.CalledProcessError as exc:
-            if can_fail:
-                pass
-            else:
-                raise
-
-
-def get_ngrok_url(port):
-    url = "http://localhost:{0}/api/tunnels/command_line".format(port)
-    while True:
-        try:
-            resp = requests.get(url)
-            return resp.json()['public_url']
-        except (requests.ConnectionError, KeyError):
-            pass
-
-
-def start_ngrok(for_port):
-    api_port = free_port()
-    dot = os.path.dirname(os.path.realpath(__file__))
-    ngrok_path = os.path.join(dot, 'ngrok')
-    config = 'ngrok.yml'
-    template(config, api_port)
-    process = run_silent([ngrok_path, 'http', str(for_port), '-config', config])
-    return process, get_ngrok_url(api_port)
 
 
 def checkout(branch, new=False):
@@ -69,12 +24,14 @@ def checkout(branch, new=False):
 
 def clean():
     checkout('master')
+    '''
     subprocess.check_call([
         'git', 'reset', '--hard', 'HEAD'
     ])
     subprocess.check_call([
         'git', 'clean', '-fd',
     ])
+    '''
 
 
 def commit():
@@ -107,13 +64,6 @@ def clean_up(branch):
         subprocess.check_call(cmd)
 
 
-def template(name, *fmt_args):
-    with open("{0}.template".format(name), 'r') as fh:
-        template_string = fh.read()
-    with open(name, 'w') as fh:
-        fh.write(template_string.format(*fmt_args))
-
-
 def main(cargo_path, user, token, ngrok_proc):
     clean()
     branch = "compile-{0}".format(uuid.uuid4().hex[:7])
@@ -130,10 +80,10 @@ def main(cargo_path, user, token, ngrok_proc):
             'cargo', 'read-manifest',
             "--manifest-path={0}".format(manifest_path)
         ]))
-        receiver_port = free_port()
-        ngrok_proc, ngrok_url = start_ngrok(receiver_port)
-        template('.travis.yml', cargo_manifest['name'], ngrok_url)
-        template('appveyor.yml', cargo_manifest['name'], ngrok_url)
+        receiver_port = util.free_port()
+        ngrok_proc, ngrok_url = util.start_ngrok(receiver_port)
+        util.template('.travis.yml', cargo_manifest['name'], ngrok_url)
+        util.template('appveyor.yml', cargo_manifest['name'], ngrok_url)
         commit()
         make_pr(user, token, branch)
         receiver = subprocess.Popen([
