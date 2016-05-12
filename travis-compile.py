@@ -79,7 +79,7 @@ def main(cargo_path, user, token, ngrok_proc):
         cargo_manifest = json.loads(subprocess.check_output([
             'cargo', 'read-manifest',
             "--manifest-path={0}".format(manifest_path)
-        ]))
+        ]).decode('utf8'))
         receiver_port = util.free_port()
         ngrok_proc, ngrok_url = util.start_ngrok(receiver_port)
         util.template('.travis.yml', cargo_manifest['name'], ngrok_url)
@@ -91,8 +91,9 @@ def main(cargo_path, user, token, ngrok_proc):
             str(receiver_port), '6',
         ])
         receiver.wait()
-    except Exception as exc:
-        print(exc)
+    # except Exception as exc:
+    #     import ipdb;ipdb.set_trace()
+    #     print(exc)
     finally:
         clean_up(branch)
 
