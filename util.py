@@ -76,6 +76,7 @@ def travis_encrypt(user_repo, value):
     pubkey = rsa.PublicKey.load_pkcs1(pubkey_str)
     return base64.bs64encode(rsa.encrypt(value, pubkey))
 
+
 def appveyor_encrypt(api_key, value):
     endpoint_url = 'https://ci.appveyor.com/api/account/encrypt'
     headers = {'Authorization': "Bearer {0}".format(api_key)}

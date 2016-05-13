@@ -65,7 +65,7 @@ def clean_up(branch):
         # subprocess.check_call(cmd)
 
 
-def main(cargo_path, user_repo, token, ngrok_proc):
+def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
     clean()
     branch = "compile-{0}".format(uuid.uuid4().hex[:7])
     rust_src = 'rust-src'
@@ -85,10 +85,12 @@ def main(cargo_path, user_repo, token, ngrok_proc):
         ngrok_proc, ngrok_url = util.start_ngrok(receiver_port)
         print("Requesting pubkey for {0} ...".format(user_repo))
         import ipdb;ipdb.set_trace()
-        util.template('.travis.yml', cargo_manifest['name'], util.travis_encrypt(ngrok_url))
-        util.template('appveyor.yml', cargo_manifest['name'], util.appveyor_encrypt(ngrok_url))
+        travis_url = util.travis_encrypt(user_repo, ngrok_url)
+        appveyor_url = util.appveyor_encrypt(appveyor_token, ngrok_url)
+        util.template('.travis.yml', cargo_manifest['name'], travis_url)
+        util.template('appveyor.yml', cargo_manifest['name'], appveyor_url)
         commit()
-        make_pr(user_repo, token, branch)
+        make_pr(user_repo, github_token, branch)
         receiver = subprocess.Popen([
             'python', 'receiver.py',
             str(receiver_port), '6',
@@ -102,10 +104,10 @@ def main(cargo_path, user_repo, token, ngrok_proc):
 
 if __name__ == '__main__':
     subprocess.check_call(['./install-ngrok.sh'])
-    cargo_path, user_repo, token = sys.argv[1:]
+    cargo_path, user_repo, github_token, appveyor_token = sys.argv[1:]
     ngrok_proc = None
     try:
-        main(cargo_path, user_repo, token, ngrok_proc)
+        main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc)
     finally:
         if ngrok_proc:
             ngrok_proc.terminate()
