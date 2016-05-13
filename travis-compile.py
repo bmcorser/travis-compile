@@ -84,11 +84,9 @@ def main(cargo_path, user_repo, token, ngrok_proc):
         receiver_port = util.free_port()
         ngrok_proc, ngrok_url = util.start_ngrok(receiver_port)
         print("Requesting pubkey for {0} ...".format(user_repo))
-        pubkey_url = "https://api.travis-ci.org/repos/{0}/key".format(user_repo)
-        pubkey_str = requests.get(pubkey_url).json()['key']
         import ipdb;ipdb.set_trace()
-        util.template('.travis.yml', cargo_manifest['name'], ngrok_url)
-        util.template('appveyor.yml', cargo_manifest['name'], ngrok_url)
+        util.template('.travis.yml', cargo_manifest['name'], util.travis_encrypt(ngrok_url))
+        util.template('appveyor.yml', cargo_manifest['name'], util.appveyor_encrypt(ngrok_url))
         commit()
         make_pr(user_repo, token, branch)
         receiver = subprocess.Popen([

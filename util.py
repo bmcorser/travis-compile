@@ -1,8 +1,10 @@
+import base64
 import os
 import socket
 import subprocess
 
 import requests
+import rsa
 
 
 def run_silent(cmd, can_fail=False, **overrides):
@@ -59,3 +61,23 @@ def start_ngrok(for_port):
         ngrok_path, 'http', str(for_port), '-config', config
     ])
     return process, get_ngrok_url(api_port)
+
+
+def travis_encrypt(user_repo, value):
+    pubkey_url = "https://api.travis-ci.org/repos/{0}/key".format(user_repo)
+    pubkey_json = requests.get(pubkey_url).json()
+    pubkey_str = pubkey_json['key'].replace('PUBLIC', 'RSA PUBLIC')
+
+    # magic from http://stackoverflow.com/a/29707204/3075972
+    pubkey_lines = pubkey_str.split('\n')
+    pubkey_lines[1] = pubkey_lines[1][32:]
+    pubkey_str = '\n'.join(pubkey_lines)
+
+    pubkey = rsa.PublicKey.load_pkcs1(pubkey_str)
+    return base64.bs64encode(rsa.encrypt(value, pubkey))
+
+def appveyor_encrypt(api_key, value):
+    endpoint_url = 'https://ci.appveyor.com/api/account/encrypt'
+    headers = {'Authorization': "Bearer {0}".format(api_key)}
+    data = {'plainValue': value}
+    return requests.post(endpoint_url, headers=headers, json=data).text
