@@ -74,7 +74,7 @@ def travis_encrypt(user_repo, value):
     pubkey_str = '\n'.join(pubkey_lines)
 
     pubkey = rsa.PublicKey.load_pkcs1(pubkey_str)
-    return base64.b64encode(rsa.encrypt(value, pubkey))
+    return base64.b64encode(rsa.encrypt(value.encode('ascii'), pubkey))
 
 
 def appveyor_encrypt(api_key, value):
