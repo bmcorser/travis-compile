@@ -43,18 +43,18 @@ def commit():
     subprocess.check_call(['git', 'commit', '-m', 'Ok then!'])
 
 
-def make_pr(user, token, branch):
+def make_pr(user_repo, token, branch):
+    user, _ = user_repo.split('/')
     subprocess.check_call(['git', 'push', 'origin', branch])
     url = '/'.join([GITHUB_API, "repos/{0}/pulls".format(user_repo)])
     pr = {
         'title': 'Compile me!',
         'body': '',
-        'head_sha': ref_sha('HEAD'),
-        'base_sha': ref_sha('origin/master'),
+        # 'head_sha': ref_sha('HEAD'),
+        # 'base_sha': ref_sha('origin/master'),
         'head': "{0}:{1}".format(user, branch),
         'base': 'master'
     }
-    user, _ = user_repo.split('/')
     import ipdb;ipdb.set_trace()
     resp = requests.post(url, auth=(user, token), json=pr, timeout=5)
     if not resp.ok:
