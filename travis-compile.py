@@ -92,7 +92,7 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
         receiver_port = util.free_port()
         ngrok_proc, ngrok_url = util.start_ngrok(receiver_port)
         print("Requesting pubkey for {0} ...".format(user_repo))
-        travis_url = util.travis_encrypt(user_repo, ngrok_url)
+        travis_url = util.travis_encrypt(user_repo, "NGROK_URL={0}".format(ngrok_url))
         appveyor_url = util.appveyor_encrypt(appveyor_token, ngrok_url)
         util.template('.travis.yml', cargo_manifest['name'], travis_url)
         util.template('appveyor.yml', cargo_manifest['name'], appveyor_url)
