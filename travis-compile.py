@@ -22,7 +22,8 @@ def checkout(branch, new=False):
     subprocess.check_call(cmd)
 
 def ref_sha(ref):
-    return subprocess.check_output(['git', 'rev-parse', ref]).strip()
+    cmd = ['git', 'rev-parse', ref]
+    return subprocess.check_output(cmd).strip().encode('utf8')
 
 
 def clean():
