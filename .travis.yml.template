@@ -13,12 +13,15 @@ script:
   - python sender.py {0}
 
 env:
-  - ARCH=x86_64
-  - ARCH=i686
+  global:
+    NGROK_URL:
+      secure: {1}
+  matrix:
+    - ARCH=x86_64
+    - ARCH=i686
 
-environment:
- NGROK_URL:
-  secure: {1}
+env:
+
 addons:
   apt:
     packages:
