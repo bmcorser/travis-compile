@@ -84,7 +84,6 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
         receiver_port = util.free_port()
         ngrok_proc, ngrok_url = util.start_ngrok(receiver_port)
         print("Requesting pubkey for {0} ...".format(user_repo))
-        import ipdb;ipdb.set_trace()
         travis_url = util.travis_encrypt(user_repo, ngrok_url)
         appveyor_url = util.appveyor_encrypt(appveyor_token, ngrok_url)
         util.template('.travis.yml', cargo_manifest['name'], travis_url)
@@ -96,9 +95,9 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
             str(receiver_port), '6',
         ])
         receiver.wait()
-    # except Exception as exc:
-    #     import ipdb;ipdb.set_trace()
-    #     print(exc)
+    except Exception as exc:
+        import ipdb;ipdb.set_trace()
+        print(exc)
     finally:
         clean_up(branch)
 
