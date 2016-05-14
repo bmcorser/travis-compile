@@ -1,7 +1,7 @@
 sudo: required
 language: rust
 rust:
-  - 1.1.0
+ - 1.1.0
 
 os:
   - linux
@@ -13,12 +13,13 @@ script:
   - python sender.py {0}
 
 env:
-  - ARCH=x86_64
-  - ARCH=i686
+  global:
+    - secure: {1}
 
-environment:
- NGROK_URL:
-  secure: {1}
+  matrix:
+    - ARCH=x86_64
+    - ARCH=i686
+
 addons:
   apt:
     packages:
