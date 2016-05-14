@@ -21,6 +21,9 @@ def checkout(branch, new=False):
     cmd.append(branch)
     subprocess.check_call(cmd)
 
+def ref_sha(ref):
+    return subprocess.check_output(['git', 'rev-parse', ref]).strip()
+
 
 def clean():
     checkout('master')
@@ -45,12 +48,16 @@ def make_pr(user, token, branch):
     pr = {
         'title': 'Compile me!',
         'body': '',
+        'head_sha': ref_sha('HEAD'),
+        'base_sha': ref_sha('origin/master'),
         'head': "{0}:{1}".format(user, branch),
         'base': 'master'
     }
     user, _ = user_repo.split('/')
+    import ipdb;ipdb.set_trace()
     resp = requests.post(url, auth=(user, token), json=pr, timeout=5)
-    assert resp.ok
+    if not resp.ok:
+        raise Exception(resp)
     return resp.json()
 
 
