@@ -9,6 +9,7 @@
 build_script:
   - ps: Write-Host $env:NGROK_URL
   - ps: Write-Host $env:OTHER_THING
+  - ps: Write-Host $env:BIG_OTHER
 
 platform:
   - x86
@@ -22,3 +23,4 @@ environment:
       secure: {1}
     OTHER_THING:
       secure: 17CQKazPTCVHppoQbnocDg==
+    BIG_OTHER: fff
