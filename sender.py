@@ -12,7 +12,8 @@ def main(rust_name):
         'Windows': 'windows'
     }
     system_name = system_aliases[platform.system()]
-    name = "{0}-{1}-{2}.tar.gz".format(rust_name, system_name, env['ARCH'])
+    name_fmt = (rust_name, system_name, platform.machine())
+    name = "{0}-{1}-{2}.tar.gz".format(*name_fmt)
     files = {name: open('./release.tar.gz', 'rb')}
     resp = requests.post(env['NGROK_URL'], files=files)
     assert resp.ok
