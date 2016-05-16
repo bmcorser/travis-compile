@@ -30,6 +30,9 @@ def template(name, *fmt_args):
         template_string = fh.read()
     with open(name, 'w') as fh:
         fh.write(template_string.format(*fmt_args))
+    with open(name, 'r') as fh:
+        print("{0} written:".format(name))
+        print(fh.read())
 
 
 def free_port():

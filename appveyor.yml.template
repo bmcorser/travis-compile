@@ -1,9 +1,9 @@
 install:
-  - ps: . .\install.ps1
-  - ps: python -m pip install --upgrade pip
-  - ps: python -m pip install requests flask
-  - ps: Push-Location rust-src; cargo build --release; Pop-Location
-  - ps: tar -zcvf release.tar.gz rust-src/target/release
+#   - ps: . .\install.ps1
+#   - ps: python -m pip install --upgrade pip
+#   - ps: python -m pip install requests flask
+#   - ps: Push-Location rust-src; cargo build --release; Pop-Location
+#   - ps: tar -zcvf release.tar.gz rust-src/target/release
   - ps: python .\sender.py {0}
 
 platform:

@@ -2,10 +2,13 @@ import platform
 from os import environ as env
 import sys
 
-import requests
+# import requests
 
 
 def main(rust_name):
+    import pprint;pprint.pprint(env)
+    exit(0)
+    '''
     system_aliases = {
         'Darwin': 'macosx',
         'Linux': 'linux',
@@ -15,9 +18,9 @@ def main(rust_name):
     name_fmt = (rust_name, system_name, platform.machine())
     name = "{0}-{1}-{2}.tar.gz".format(*name_fmt)
     files = {name: open('./release.tar.gz', 'rb')}
-    import pprint;pprint.pprint(env)
     resp = requests.post(env['NGROK_URL'], files=files)
     assert resp.ok
+    '''
 
 if __name__ == '__main__':
     rust_name = sys.argv[1]
