@@ -11,4 +11,4 @@ environment:
     - RUST_VERSION: 1.1.0
   global:
     NGROK_URL:
-      secure: HsKWZOtLaSUHjlBGiAgkrWDkjPg2P3ZY5A98Lowg0y4=
+      secure: 5Py6iTxbC+Mbxo+utwq1Nqo4FKMfwq6XbxnSw8NObUs=
