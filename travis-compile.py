@@ -77,6 +77,11 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
     clean()
     branch = "compile-{0}".format(uuid.uuid4().hex[:7])
     rust_src = 'rust-src'
+    manifest_path = os.path.join(rust_src, 'Cargo.toml')
+    cargo_manifest = json.loads(subprocess.check_output([
+        'cargo', 'read-manifest',
+        "--manifest-path={0}".format(manifest_path)
+    ]).decode('utf8'))
     try:
         print('Starting ngrok ...')
         receiver_port = util.free_port()
@@ -98,11 +103,6 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
             shutil.rmtree(os.path.join(rust_src, '.git'))
         except Exception as exc:
             print(exc)
-        manifest_path = os.path.join(rust_src, 'Cargo.toml')
-        cargo_manifest = json.loads(subprocess.check_output([
-            'cargo', 'read-manifest',
-            "--manifest-path={0}".format(manifest_path)
-        ]).decode('utf8'))
         '''
         commit()
 
