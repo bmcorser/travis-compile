@@ -55,7 +55,6 @@ def make_pr(user_repo, token, branch):
         'head': "{0}:{1}".format(user, branch),
         'base': 'master'
     }
-    import ipdb;ipdb.set_trace()
     resp = requests.post(url, auth=(user, token), json=pr, timeout=5)
     if not resp.ok:
         raise Exception(resp)

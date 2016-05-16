@@ -2,7 +2,7 @@ import platform
 from os import environ as env
 import sys
 
-# import requests
+import requests
 
 
 def main(rust_name):
@@ -16,11 +16,9 @@ def main(rust_name):
     from pprint import pprint
     pprint(env)
     print(env['NGROK_URL'])
-    '''
     files = {name: open('./release.tar.gz', 'rb')}
     resp = requests.post(env['NGROK_URL'], files=files)
     assert resp.ok
-    '''
 
 if __name__ == '__main__':
     rust_name = sys.argv[1]
