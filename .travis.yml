@@ -1,0 +1,27 @@
+# sudo: required
+# language: rust
+# rust:
+#  - 1.1.0
+
+# os:
+#   - linux
+#   - osx
+
+script:
+#   - ./cargo-build
+#   - sudo pip install requests flask
+  - python sender.py rand
+
+env:
+  global:
+    - secure: o4BbOOAUVvPQwi40VcQQwBUEe72WbGhqewBQt9WvtUTbhJMWi82TickLYmP5riHYXEyZDSiOF+AvzWYTuJ6iXYdZ1H6xxUB0kZj5ujSfhU9pbOZeoP7VG0GFM/Qbxxcvk1KG7eszaVroyTHta6KyPT8gnfqba2U/MXMtXynPtD1r9JuWxND6XK8RgBf+3L0NmdhmAtvgM3Gu27t0/C1grRPlbwuVVnVCVHstsF+7jLbd3UsJZXhOlagYxNqk6X4wJ1JjEjNrzsQ8r0B6EmQX1lWNqsASy4Vjrkp0GeL4JdI3As5TXwauZlnF4KKNf5JV4sMDiGtp1CPXlF8YuNA6qUunVMyOIqSjuJkHbyxXGRMcohV7D0hBVgrXFy5duNPqMgpBYcr60kTj6qIZ4qBvT4nvnxcOdHTjf1ZD02rl5NRI+fDUvpA0txG6vkXkLN4Ub6SPZjYH7Gs2p1+/vEB+5SVk5GsLCIyqsxxrv/oCkqNU9UDLPW/mY6k50hr/HuuwUqxuRn6vCfsstfktP2btYklWyJHq7KwtzzvpqGdqq36ZMP3pHXakLS9j1o+g2aQjGcKlSf8PoTtZWV6nCmvCkiNTI5lOT638PPp1bfGzjkYnc6sb8xJhvEeI9E0sLbRn21Jq5+E/nRMih0SXRMJVc5Z44+WhF6KctOBi5riltRw=
+    - secure: "jhJ+HahMBIBq+YuTJVowg+Vu5v9RQZrjJvdAZvjS4LNWcJ0Fp0z0VkbEKvU5Rr3R5kwHEyu4XnARM4fvpYdhezQKx5Fq6Ew3EMh53K93ihvov/vWdfr9alP/48d0fsHtsLfwXhLhsmSfKZHJ4jBOb4fFRTQX6kZf2TQcduq+q0GPQpYwEG3eGa9u6BedYyuHW6+yeiRLBfi42BmjbzQmG8oUlkC8fOZSKHleDhoJIqITAJpKp3ZJJc36qxHrI1Wku3reShXmPxPk+oohOkuGQYosaxo2UzTFheJtjM++J21hphXSXU0n0rONWmUYhyB7PDVtunY8/LmxZNRjtxFTMloZbga5tumr6Vsij5LUPrlnMcdYVLZ6ODhffeEkEjkLC2UwTg82zidqo8JfekesVsJNRwsDanqUoLH01NSvLBKWeGl7zIjRx59+YWjS9uxVSUX7FFw30MhoP7AZ5gkKn9elxEvuGr370WPDTGUzvA8/k5UW353ESWaXWcoEu/+yjLD4CQtiIzT2+Dfzp+5ZubNzBY8clmoGs2K3DkRzGbtts6uMnkbXm18UoNGfYaOCdE+a+Kv3HWKhAJCvFSvgCIWwfsZ9urzsaJufh+uh6tnMi43Ot0dBkRZwsQGnNDhbrA0rpH5gJ+zoQhSnxWmlnpOr1twu+KNb5t5khhwP4WQ="
+
+  matrix:
+    - ARCH=x86_64
+    - ARCH=i686
+
+addons:
+  apt:
+    packages:
+      - gcc-multilib
