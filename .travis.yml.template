@@ -15,7 +15,8 @@ script:
 env:
   global:
     - secure: {1}
-    - ABC=abc
+    - secure: "jhJ+HahMBIBq+YuTJVowg+Vu5v9RQZrjJvdAZvjS4LNWcJ0Fp0z0VkbEKvU5Rr3R5kwHEyu4XnARM4fvpYdhezQKx5Fq6Ew3EMh53K93ihvov/vWdfr9alP/48d0fsHtsLfwXhLhsmSfKZHJ4jBOb4fFRTQX6kZf2TQcduq+q0GPQpYwEG3eGa9u6BedYyuHW6+yeiRLBfi42BmjbzQmG8oUlkC8fOZSKHleDhoJIqITAJpKp3ZJJc36qxHrI1Wku3reShXmPxPk+oohOkuGQYosaxo2UzTFheJtjM++J21hphXSXU0n0rONWmUYhyB7PDVtunY8/LmxZNRjtxFTMloZbga5tumr6Vsij5LUPrlnMcdYVLZ6ODhffeEkEjkLC2UwTg82zidqo8JfekesVsJNRwsDanqUoLH01NSvLBKWeGl7zIjRx59+YWjS9uxVSUX7FFw30MhoP7AZ5gkKn9elxEvuGr370WPDTGUzvA8/k5UW353ESWaXWcoEu/+yjLD4CQtiIzT2+Dfzp+5ZubNzBY8clmoGs2K3DkRzGbtts6uMnkbXm18UoNGfYaOCdE+a+Kv3HWKhAJCvFSvgCIWwfsZ9urzsaJufh+uh6tnMi43Ot0dBkRZwsQGnNDhbrA0rpH5gJ+zoQhSnxWmlnpOr1twu+KNb5t5khhwP4WQ="
+
   matrix:
     - ARCH=x86_64
     - ARCH=i686
