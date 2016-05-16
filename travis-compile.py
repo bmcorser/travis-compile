@@ -77,6 +77,11 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
     clean()
     branch = "compile-{0}".format(uuid.uuid4().hex[:7])
     rust_src = 'rust-src'
+    shutil.copytree(cargo_path, rust_src)
+    try:
+        shutil.rmtree(os.path.join(rust_src, '.git'))
+    except Exception as exc:
+        print(exc)
     manifest_path = os.path.join(rust_src, 'Cargo.toml')
     cargo_manifest = json.loads(subprocess.check_output([
         'cargo', 'read-manifest',
@@ -98,11 +103,6 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
         '''
         print('Committing your Rust source to a new branch ...')
         checkout(branch, new=True)
-        shutil.copytree(cargo_path, rust_src)
-        try:
-            shutil.rmtree(os.path.join(rust_src, '.git'))
-        except Exception as exc:
-            print(exc)
         '''
         commit()
 
