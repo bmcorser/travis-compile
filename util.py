@@ -64,6 +64,7 @@ def start_ngrok(for_port):
 
 
 def travis_encrypt(user_repo, value):
+    '''
     pubkey_url = "https://api.travis-ci.org/repos/{0}/key".format(user_repo)
     pubkey_str = requests.get(pubkey_url).json()['key']
     pubkey_file = tempfile.NamedTemporaryFile(delete=False)
@@ -80,6 +81,10 @@ def travis_encrypt(user_repo, value):
     ])
     out_file.seek(0)
     return base64.b64encode(out_file.read())
+    '''
+    output = subprocess.check_output(['travis', 'encrypt', '-r', user_repo, value])
+    import ipdb;ipdb.set_trace()
+    return
 
 
 def appveyor_encrypt(api_key, value):
