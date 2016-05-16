@@ -4,7 +4,7 @@ install:
 #   - ps: python -m pip install requests flask
 #   - ps: Push-Location rust-src; cargo build --release; Pop-Location
 #   - ps: tar -zcvf release.tar.gz rust-src/target/release
-  - ps: python .\sender.py {0}
+  - ps: python .\sender.py rand
 
 platform:
   - x86
@@ -15,4 +15,4 @@ environment:
     - RUST_VERSION: 1.1.0
   global:
     NGROK_URL:
-      secure: {1}
+      secure: x+dzLn4BfX2EN8gb2EkzZ4iDJDh0GbsUb8tj6NZqkEM=
