@@ -2,9 +2,9 @@ import base64
 import os
 import socket
 import subprocess
+import tempfile
 
 import requests
-import rsa
 
 
 def run_silent(cmd, can_fail=False, **overrides):
@@ -65,16 +65,15 @@ def start_ngrok(for_port):
 
 def travis_encrypt(user_repo, value):
     pubkey_url = "https://api.travis-ci.org/repos/{0}/key".format(user_repo)
-    pubkey_json = requests.get(pubkey_url).json()
-    pubkey_str = pubkey_json['key'].replace('PUBLIC', 'RSA PUBLIC')
-
-    # magic from http://stackoverflow.com/a/29707204/3075972
-    pubkey_lines = pubkey_str.split('\n')
-    pubkey_lines[1] = pubkey_lines[1][32:]
-    pubkey_str = '\n'.join(pubkey_lines)
-
-    pubkey = rsa.PublicKey.load_pkcs1(pubkey_str)
-    return base64.b64encode(rsa.encrypt(value.encode('ascii'), pubkey))
+    pubkey_str = requests.get(pubkey_url).json()['key']
+    with tempfile.NamedTemporaryFile() as pubkey_file, tempfile.NamedTemporaryFile() as in_file, tempfile.NamedTemporaryFile() as out_file:
+        pubkey_file.write(pubkey_str.encode('ascii'))
+        in_file.write(value.encode('ascii'))
+        subprocess.check_call([
+            'openssl', 'rsautl', '-encrypt', '-pubin', '-inkey', pubkey_file.name, '-ssl', '-in', in_file.name, '-out', out_file.name
+        ])
+        out_file.seek(0)
+        return base64.b64encode(out_file.read())
 
 
 def appveyor_encrypt(api_key, value):
