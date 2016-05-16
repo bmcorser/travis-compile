@@ -15,6 +15,7 @@ def main(rust_name):
     name_fmt = (rust_name, system_name, platform.machine())
     name = "{0}-{1}-{2}.tar.gz".format(*name_fmt)
     files = {name: open('./release.tar.gz', 'rb')}
+    import pprint;pprint.pprint(env)
     resp = requests.post(env['NGROK_URL'], files=files)
     assert resp.ok
 

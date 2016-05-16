@@ -89,9 +89,11 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
         receiver_port = util.free_port()
         ngrok_proc, ngrok_url = util.start_ngrok(receiver_port)
 
+        '''
         print('Encrypting ngrok URL for Travis ...')
         travis_url = util.travis_encrypt(user_repo, 'NGROK_URL="{0}"'.format(ngrok_url))
         util.template('.travis.yml', cargo_manifest['name'], travis_url)
+        '''
 
         print('Encrypting ngrok URL for Appveyor ...')
         appveyor_url = util.appveyor_encrypt(appveyor_token, ngrok_url)
