@@ -1,15 +1,15 @@
-sudo: required
-language: rust
-rust:
-  - 1.1.0
+# sudo: required
+# language: rust
+# rust:
+#  - 1.1.0
 
-os:
-  - linux
-  - osx
+# os:
+#   - linux
+#   - osx
 
 script:
-  - ./cargo-build
-  - sudo pip install requests flask
+#   - ./cargo-build
+#   - sudo pip install requests flask
   - python sender.py {0}
 
 env:

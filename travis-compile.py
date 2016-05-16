@@ -90,6 +90,7 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
         appveyor_url = util.appveyor_encrypt(appveyor_token, ngrok_url)
         util.template('appveyor.yml', cargo_manifest['name'], appveyor_url)
 
+        '''
         print('Committing your Rust source to a new branch ...')
         checkout(branch, new=True)
         shutil.copytree(cargo_path, rust_src)
@@ -102,6 +103,7 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
             'cargo', 'read-manifest',
             "--manifest-path={0}".format(manifest_path)
         ]).decode('utf8'))
+        '''
         commit()
 
         print('Making PR on GitHub ...')
