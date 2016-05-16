@@ -70,7 +70,7 @@ def clean_up(branch):
     )
     for cmd in cmds:
         print(' '.join(cmd))
-        # subprocess.check_call(cmd)
+        subprocess.check_call(cmd)
 
 
 def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
