@@ -7,8 +7,8 @@
 #   - ps: python .\sender.py {0}
 
 build_script:
-  - echo %NGROK_URL%
-  - echo %OTHER_THING%
+  - ps: Write-Host $env:NGROK_URL
+  - ps: Write-Host $env:OTHER_THING
 
 platform:
   - x86
