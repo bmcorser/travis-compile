@@ -82,7 +82,7 @@ def travis_encrypt(user_repo, value):
     out_file.seek(0)
     return base64.b64encode(out_file.read())
     '''
-    return subprocess.check_output(['travis', 'encrypt', '-r', user_repo, value]).strip()
+    return subprocess.check_output(['travis', 'encrypt', '-r', user_repo, value]).strip().decode('utf8')
 
 
 def appveyor_encrypt(api_key, value):
