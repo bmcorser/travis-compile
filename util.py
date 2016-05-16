@@ -30,9 +30,6 @@ def template(name, *fmt_args):
         template_string = fh.read()
     with open(name, 'w') as fh:
         fh.write(template_string.format(*fmt_args))
-    with open(name, 'r') as fh:
-        print("{0} written:".format(name))
-        print(fh.read())
 
 
 def free_port():
@@ -83,7 +80,6 @@ def travis_encrypt(user_repo, value):
     ])
     out_file.seek(0)
     return base64.b64encode(out_file.read()).strip().decode('utf8')
-    # return subprocess.check_output(['travis', 'encrypt', '-r', user_repo, value]).strip().decode('utf8')
 
 
 def appveyor_encrypt(api_key, value):

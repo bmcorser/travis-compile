@@ -109,7 +109,7 @@ def main(cargo_path, user_repo, github_token, appveyor_token, ngrok_proc):
         print('Starting the receiver server ...')
         receiver = subprocess.Popen([
             'python', 'receiver.py',
-            str(receiver_port), '6',
+            str(receiver_port), '4',
         ])
 
         print('Now we wait.')

@@ -8,7 +8,6 @@ N = None
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     global N
-    import ipdb;ipdb.set_trace()
     if request.method == 'POST':
         for name in request.files:
             file = request.files[name]
