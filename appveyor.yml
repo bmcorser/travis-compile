@@ -1,0 +1,24 @@
+# install:
+#   - ps: . .\install.ps1
+#   - ps: python -m pip install --upgrade pip
+#   - ps: python -m pip install requests flask
+#   - ps: Push-Location rust-src; cargo build --release; Pop-Location
+#   - ps: tar -zcvf release.tar.gz rust-src/target/release
+#   - ps: python .\sender.py rand
+
+build_script:
+  - ps: Write-Host $env:NGROK_URL
+  - ps: Write-Host $env:OTHER_THING
+
+platform:
+  - x86
+  - x64
+
+environment:
+  matrix:
+    - RUST_VERSION: 1.1.0
+  global:
+    NGROK_URL:
+      secure: HcrPN4YCOOFzPYwt3xtAgRSSlCUvATs1gsAwqoc+IFc=
+    OTHER_THING:
+      secure: 17CQKazPTCVHppoQbnocDg==
