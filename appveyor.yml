@@ -1,0 +1,9 @@
+install:
+  - ps: . .\install.ps1
+  - ps: pip install requests flask
+  - ps: python .\sender.py
+
+environment:
+  matrix:
+    - RUST_VERSION: 1.1.0
+  NGROK_URL: https://a9c7e950.ngrok.io
